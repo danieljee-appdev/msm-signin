@@ -19,6 +19,10 @@ class Movie < ApplicationRecord
 
   has_many(:cast, { :through => :characters, :source => :actor })  
 
+  has_many(:users, { :through => :bookmarks, :source => :user })
+
+  has_many(:bookmarks, { :class_name => "Bookmark", :foreign_key => "movie_id" })
+
   validates(:year, { :numericality => { :less_than_or_equal_to => 2030, :greater_than_or_equal_to => 1800 } })
 
   validates(:title, { :presence => true })

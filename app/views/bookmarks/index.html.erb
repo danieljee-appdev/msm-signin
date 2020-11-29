@@ -1,9 +1,18 @@
 <div>
-  <div>
     <h1>
-      List of all bookmarks
+      <%= @current_user.first_name %>'s bookmarks
     </h1>
-  </div>
+    <form action="/insert_bookmark" method="post">
+      <select name="query_movie_id" id="movie_id_box">
+        <% @list_of_movies.each do |a_movie| %>
+        <% bookmarks_array = a_movie.bookmarks %>
+        <% user_bookmark = bookmarks_array.where({ :user_id => @current_user.id}) %>
+        <% if user_bookmark == nil %>
+        p <option value="<%= a_movie.title %>"><%= a_movie.title %></option>
+        <% else %>
+        <% end %>
+        <% end %>    
+      </select>
 </div>
 
 <hr>
@@ -15,13 +24,7 @@
     </h2>
 
     <form action="/insert_bookmark" method="post">
-      <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id">
-      </div>
+       <input type="hidden" id="user_id_box" name="query_user_id" value="<%= @current_user.id %>">
 
       <div>
         <label for="movie_id_box">
@@ -44,14 +47,6 @@
     <table>
       <tr>
         <th>
-          ID
-        </th>
-
-        <th>
-          User
-        </th>
-
-        <th>
           Movie
         </th>
 
@@ -70,15 +65,9 @@
       <% @list_of_bookmarks.each do |a_bookmark| %>
       <tr>
         <td>
-          <%= a_bookmark.id %>
-        </td>
-
-        <td>
-          <%= a_bookmark.user_id %>
-        </td>
-
-        <td>
-          <%= a_bookmark.movie_id %>
+          <a href="/movies/<%= a_bookmark.movie.id %>">
+          <%= a_bookmark.movie.title %>
+          </a>
         </td>
 
         <td>
@@ -89,9 +78,9 @@
         </td>
 
         <td>
-          <a href="/bookmarks/<%= a_bookmark.id %>">
-            Show details
-          </a>
+        <a href="/delete_bookmark/<%= a_bookmark.id %>">
+      Un-bookmark
+        </a>
         </td>
       </tr>
       <% end %>
